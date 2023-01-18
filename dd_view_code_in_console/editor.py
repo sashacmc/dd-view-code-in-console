@@ -8,7 +8,13 @@ class BaseEditor(object):
 
 class VimEditor(BaseEditor):
     def get_command(self, file, line, column):
-        return f"vim '+normal {line}G{column}|' {file}"
+        if line is not None:
+            if column is not None:
+                return f"vim '+normal {line}G{column}|' {file}"
+            else:
+                return f"vim -c {line} {file}"
+        else:
+            return f"vim {file}"
 
 
 class NanoEditor(BaseEditor):

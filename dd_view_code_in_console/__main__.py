@@ -3,6 +3,7 @@ import os
 
 from .config import Config
 from .editor import get_editor
+from .gitfile import GitFile
 from .terminal import get_terminal
 from .url import parse_url, find_repo_urls
 
@@ -18,7 +19,8 @@ def open_url(cfg, url):
     editor = get_editor(cfg.get_editor())
     location = parse_url(url)
     local_repo = cfg.get_local_path(location["repo"])
-    terminal.open(editor, local_repo, location)
+    f = GitFile(local_repo, location)
+    terminal.open(editor, f)
 
 
 def parse_args():

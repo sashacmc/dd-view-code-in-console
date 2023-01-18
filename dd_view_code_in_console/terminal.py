@@ -6,18 +6,16 @@ class BaseTerminal(object):
     def open(self, editor, repo, location):
         pass
 
-    def _get_command(self, editor, repo, location):
-        return editor.get_command(
-            os.path.join(repo, location["path"]), location["line"], location["column"]
-        )
+    def _get_command(self, editor, gitfile):
+        return editor.get_command(gitfile.filename(), gitfile.line(), gitfile.column())
 
 
 class ITerm2Terminal(BaseTerminal):
-    def open(self, editor, repo, location):
+    def open(self, editor, gitfile):
         import iterm2
         import AppKit
 
-        cmd = self._get_command(editor, repo, location)
+        cmd = self._get_command(editor, gitfile)
         command = f'/bin/bash -l -c "{cmd}"'
 
         AppKit.NSWorkspace.sharedWorkspace().launchApplication_("iTerm.app")
@@ -31,11 +29,11 @@ class ITerm2Terminal(BaseTerminal):
 
 
 class KonsoleTerminal(BaseTerminal):
-    def open(self, editor, repo, location):
+    def open(self, editor, gitfile):
         import subprocess
-        
-        cmd = self._get_command(editor, repo, location)
-        subprocess.run(("/usr/bin/konsole", "-e", cmd)) 
+
+        cmd = self._get_command(editor, gitfile)
+        subprocess.run(("/usr/bin/konsole", "-e", cmd))
 
 
 TERMINALS = {
