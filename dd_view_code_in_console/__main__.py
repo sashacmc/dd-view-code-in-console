@@ -1,14 +1,16 @@
 import argparse
+import os
 
 from .config import Config
 from .editor import get_editor
 from .terminal import get_terminal
-from .url import parse_url
+from .url import parse_url, find_repo_urls
 
 
-def gen_config(cfg, path):
-    cfg = Config()
-    cfg.generate(path)
+def scan_repositories(cfg, path):
+    repos = find_repo_urls(path)
+    cfg.add_repositories(repos)
+    print(f"Found {len(repos)} repositories")
 
 
 def open_url(cfg, url):
@@ -39,11 +41,11 @@ def parse_args():
 
 def main():
     parser, args = parse_args()
-    cfg = Config(args.config)
+    cfg = Config(os.path.expanduser(args.config))
     if args.open:
         open_url(cfg, args.open)
     elif args.scan:
-        gen_config(cfg, args.scan)
+        scan_repositories(cfg, args.scan)
     else:
         parser.print_help()
 
