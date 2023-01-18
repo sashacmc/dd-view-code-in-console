@@ -89,7 +89,9 @@ def find_repo_urls(path):
         cfg = ConfigParser()
         cfg.read(cfg_file)
         try:
-            result.append((normalize_url(cfg['remote "origin"']["url"]), os.path.split(folder)[0]))
+            result.append(
+                (normalize_url(cfg['remote "origin"']["url"]), os.path.split(folder)[0])
+            )
         except KeyError:
-            print("Git repository has no remote URL: " + folder)
+            print(f"Git repository has no remote URL: {folder}")
     return result
