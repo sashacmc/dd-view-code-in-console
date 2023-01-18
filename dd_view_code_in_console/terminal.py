@@ -32,12 +32,15 @@ class ITerm2Terminal(BaseTerminal):
 
 class KonsoleTerminal(BaseTerminal):
     def open(self, editor, repo, location):
-        pass
+        import subprocess
+        
+        cmd = self._get_command(editor, repo, location)
+        subprocess.run(("/usr/bin/konsole", "-e", cmd)) 
 
 
 TERMINALS = {
     "iterm2": ITerm2Terminal,
-    "konsoile": KonsoleTerminal,
+    "konsole": KonsoleTerminal,
 }
 
 
