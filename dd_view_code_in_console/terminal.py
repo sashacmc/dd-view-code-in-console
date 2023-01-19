@@ -1,5 +1,6 @@
-import sys
 import os
+import sys
+import subprocess
 
 
 class BaseTerminal(object):
@@ -8,6 +9,12 @@ class BaseTerminal(object):
 
     def _get_command(self, editor, gitfile):
         return editor.get_command(gitfile.filename(), gitfile.line(), gitfile.column())
+
+
+class NoneTerminal(BaseTerminal):
+    def open(self, editor, gitfile):
+        cmd = self._get_command(editor, gitfile)
+        subprocess.run(cmd, shell=True)
 
 
 class ITerm2Terminal(BaseTerminal):
@@ -30,15 +37,21 @@ class ITerm2Terminal(BaseTerminal):
 
 class KonsoleTerminal(BaseTerminal):
     def open(self, editor, gitfile):
-        import subprocess
-
         cmd = self._get_command(editor, gitfile)
         subprocess.run(("/usr/bin/konsole", "-e", cmd))
 
 
+class GnomeTerminal(BaseTerminal):
+    def open(self, editor, gitfile):
+        cmd = self._get_command(editor, gitfile)
+        subprocess.run(f"/usr/bin/gnome-terminal --wait -- {cmd}", shell=True)
+
+
 TERMINALS = {
+    "none": NoneTerminal,
     "iterm2": ITerm2Terminal,
     "konsole": KonsoleTerminal,
+    "gnome-terminal": GnomeTerminal,
 }
 
 
