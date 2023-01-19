@@ -1,5 +1,5 @@
 # dd-view-code-in-console
-
+Allow open code links from DataDog sites in console editors
 -----
 
 ## Requriment
@@ -15,7 +15,7 @@ hatch build
 ## Installation
 
 ```console
-pip install dist/dd-view-code-in-console*
+pip install dist/dd_view_code_in_console-*.whl
 ```
 
 ## Add schema handler
