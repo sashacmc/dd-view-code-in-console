@@ -10,26 +10,40 @@ class GitFile(object):
         os.chdir(local_repo)
         revision = None
         if "revision" in location:
-            current_sha = self.__get_commit_sha()
+            try:
+                current_sha = self.__get_commit_sha()
+            except Exception as ex:
+                self.__report_error("Can't get commit hash: " + str(ex))
             if current_sha != location["revision"]:
                 revision = location["revision"]
 
         if revision is not None:
             ext = os.path.splitext(location["path"])[1]
-            self.__tempfile = tempfile.NamedTemporaryFile(suffix=ext)
-            self.__filename = self.__tempfile.name
-            self.__tempfile.write(self.__get_file(revision, location["path"]))
-            self.__tempfile.flush()
+            try:
+                data = self.__get_file(revision, location["path"])
+                self.__write_tempfile(ext, data)
+            except Exception as ex:
+                self.__report_error("Can't get file from git: " + str(ex))
         else:
             self.__filename = os.path.join(local_repo, location["path"])
 
+    def __write_tempfile(self, ext, data):
+        self.__tempfile = tempfile.NamedTemporaryFile(suffix=ext)
+        self.__tempfile.write(data)
+        self.__tempfile.flush()
+        self.__filename = self.__tempfile.name
+
+    def __report_error(self, message):
+        self.__write_tempfile(".txt", message.encode("UTF-8"))
+
     def __query_git(self, args):
         try:
-            p = subprocess.Popen(["git"] + args, stdout=subprocess.PIPE)
+            p = subprocess.Popen(["git"] + args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         except EnvironmentError:
-            print("Couldn't run git")
-            return ""
-        res = p.communicate()[0]
+            Exception("Couldn't run git")
+        res, err = p.communicate()
+        if p.returncode != 0:
+            raise Exception(err.decode("UTF-8"))
         return res.strip()
 
     def __get_commit_sha(self):
