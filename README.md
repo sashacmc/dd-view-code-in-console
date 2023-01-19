@@ -1,6 +1,6 @@
 # dd-view-code-in-console
-Allow open code links from DataDog sites in console editors
 -----
+Allow open code links from DataDog sites in console editors
 
 ## Requriment
 * Python 3.8 and above
