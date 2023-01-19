@@ -20,19 +20,28 @@ class NoneTerminal(BaseTerminal):
 class ITerm2Terminal(BaseTerminal):
     def open(self, editor, gitfile):
         import iterm2
-        import AppKit
+        from threading import Thread
 
         cmd = self._get_command(editor, gitfile)
-        command = f'/bin/bash -l -c "{cmd}"'
 
-        AppKit.NSWorkspace.sharedWorkspace().launchApplication_("iTerm.app")
+        def run_term():
+            subprocess.run(
+                ("/usr/bin/open", "-W", "-n", "-a", "/Applications/iTerm.app")
+            )
+
+        th_run = Thread(target=run_term)
+        th_run.start()
 
         async def main(connection):
             app = await iterm2.async_get_app(connection)
-            window = await iterm2.Window.async_create(connection, command=command)
             await app.async_activate()
 
+            window = app.current_terminal_window
+            session = app.current_terminal_window.current_tab.current_session
+            await session.async_send_text(f"{cmd}; exit;\n")
+
         iterm2.run_until_complete(main, True)
+        th_run.join()
 
 
 class KonsoleTerminal(BaseTerminal):

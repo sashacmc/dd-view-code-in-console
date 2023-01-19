@@ -7,7 +7,6 @@ name = "dd-view-code-in-console"
 description = 'OS Application to open source code from Datadog in the console'
 readme = "README.md"
 requires-python = ">=3.7"
-license = "Apache-2.0"
 keywords = []
 authors = [
   { name = "Alexander Bushnev", email = "Alexander@Bushnev.pro" },
