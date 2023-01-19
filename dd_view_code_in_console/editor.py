@@ -8,23 +8,35 @@ class BaseEditor(object):
 
 class VimEditor(BaseEditor):
     def get_command(self, file, line, column):
-        if line is not None:
-            if column is not None:
-                return f"vim '+normal {line}G{column}|' {file}"
-            else:
-                return f"vim -c {line} {file}"
-        else:
+        if line is None:
             return f"vim {file}"
+        if column is None:
+            return f"vim -c {line} {file}"
+        return f"vim '+normal {line}G{column}|' {file}"
 
 
 class NanoEditor(BaseEditor):
     def get_command(self, file, line, column):
-        pass
+        if line is None:
+            return f"nano {file}"
+        if column is None:
+            return f"nano +{line} {file}"
+        return f"nano +{line},{column} {file}"
+
+
+class EmacsEditor(BaseEditor):
+    def get_command(self, file, line, column):
+        if line is None:
+            return f"emacs {file}"
+        if column is None:
+            return f"emacs +{line} {file}"
+        return f"emacs +{line}:{column} {file}"
 
 
 EDITORS = {
     "vim": VimEditor,
     "nano": NanoEditor,
+    "emacs": EmacsEditor,
 }
 
 
