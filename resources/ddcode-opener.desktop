@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=DDCode Scheme Handler
+Exec=python3 -m dd_view_code_in_console -o %u
+StartupNotify=false
+MimeType=x-scheme-handler/ddcode;
