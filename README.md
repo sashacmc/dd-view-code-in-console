@@ -2,6 +2,8 @@
 -----
 Allow open code links from DataDog sites in console editors in the Linux or MacOS terminal emulator
 
+<img width="421" alt="open in console demo" src="https://user-images.githubusercontent.com/28735879/213694042-2422d521-4c32-41d1-99b5-1b05c1242b48.png">
+
 ## Linux
 ### Requriment
 * Python 3.8 and above
