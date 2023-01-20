@@ -6,8 +6,14 @@ Allow open code links from DataDog sites in console editors
 * Python 3.8 and above
 * Pip
 * Hatch (pip install hatch)
+pip install iterm2
 
 ## Linux
+### Requriment
+* Python 3.8 and above
+* Pip
+* Hatch (pip install hatch)
+
 ### Build
 ```console
 hatch build
@@ -35,6 +41,11 @@ Configure scheme handler
 xdg-mime default ddcode-opener.desktop x-scheme-handler/ddcode
 ```
 ## MacOS
+### Requriment
+* Python 3.8 and above
+* Pip
+* iterm2 (pip install iterm2)
+
 ### Build
 ```console
 python setup.py py2app -p iterm2
@@ -42,7 +53,11 @@ python setup.py py2app -p iterm2
 
 ### Installation
 
-Copy generated app from dist folder to applications
+Copy generated app from dist folder to applications.
+
+You also need to enable the Python API for iTerm2:
+
+(Prefs > General > Magic > Enable Python API)
 
 ### Usage
 Scan for git repositorines
