@@ -7,25 +7,35 @@ class GitFile(object):
     def __init__(self, local_repo, location):
         self.__line = location.get("line", None)
         self.__column = location.get("column", None)
+        repo = location["repo"]
+        if not os.path.exists(local_repo):
+            self.__report_error(f"Repository not found: {repo}")
+            return
+
         os.chdir(local_repo)
         revision = None
         if "revision" in location:
             try:
                 current_sha = self.__get_commit_sha()
             except Exception as ex:
-                self.__report_error("Can't get commit hash: " + str(ex))
+                self.__report_error(
+                    f"Can't get commit hash for repo {repo}:{local_repo}: {str(ex)}"
+                )
             if current_sha != location["revision"]:
                 revision = location["revision"]
 
+        path = location["path"]
         if revision is not None:
-            ext = os.path.splitext(location["path"])[1]
+            ext = os.path.splitext(path)[1]
             try:
-                data = self.__get_file(revision, location["path"])
+                data = self.__get_file(revision, path)
                 self.__write_tempfile(ext, data)
             except Exception as ex:
-                self.__report_error("Can't get file from git: " + str(ex))
+                self.__report_error(
+                    f"Can't get file {path} from git repo {repo}:{local_repo}: {str(ex)}"
+                )
         else:
-            self.__filename = os.path.join(local_repo, location["path"])
+            self.__filename = os.path.join(local_repo, path)
 
     def __write_tempfile(self, ext, data):
         self.__tempfile = tempfile.NamedTemporaryFile(suffix=ext)
