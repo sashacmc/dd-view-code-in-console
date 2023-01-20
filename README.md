@@ -19,12 +19,6 @@ hatch build
 pip install dist/dd_view_code_in_console-*.whl
 ```
 
-### Usage
-Scan for git repositorines
-```console
-python3 -m dd_view_code_in_console -s PATH_TO_SOURCE_CODE
-```
-
 ### Add schema handler
 Copy desktop entry file
 ```console
@@ -34,6 +28,13 @@ Configure scheme handler
 ```console
 xdg-mime default ddcode-opener.desktop x-scheme-handler/ddcode
 ```
+
+### Usage
+Scan for git repositorines
+```console
+python3 -m dd_view_code_in_console -s PATH_TO_SOURCE_CODE
+```
+
 ## MacOS
 ### Requriment
 * Python 3.8 and above
