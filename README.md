@@ -1,12 +1,6 @@
 # dd-view-code-in-console
 -----
-Allow open code links from DataDog sites in console editors
-
-## Requriment
-* Python 3.8 and above
-* Pip
-* Hatch (pip install hatch)
-pip install iterm2
+Allow open code links from DataDog sites in console editors in the Linux or MacOS terminal emulator
 
 ## Linux
 ### Requriment
