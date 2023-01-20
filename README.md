@@ -64,7 +64,10 @@ You also need to enable the Python API for iTerm2:
 (Prefs > General > Magic > Enable Python API)
 
 ### Usage
-Scan for git repositorines
+Scan for git repositorines:
 ```console
 /Applications/dd-view-code-in-console.app/Contents/MacOS/dd-view-code-in-console -s PATH_TO_SOURCE_CODE 
 ```
+Change terminal or editor:
+
+Modify `~/.dd_view_code_in_terminal.cfg` to set `terminal` to `iterm2`
