@@ -6,7 +6,7 @@ Allow open code links from DataDog sites in console editors in the Linux or MacO
 ### Requriment
 * Python 3.8 and above
 * Pip
-* Hatch (pip install hatch)
+* Hatch (pip3 install hatch)
 
 ### Build
 ```console
@@ -38,12 +38,22 @@ xdg-mime default ddcode-opener.desktop x-scheme-handler/ddcode
 ### Requriment
 * Python 3.8 and above
 * Pip
-* iterm2 (pip install iterm2)
+* iterm2 (pip3 install iterm2)
 
 ### Build
 ```console
-python setup.py py2app -p iterm2
+python3 setup.py py2app -p iterm2
 ```
+If you see somenthing like `ValueError: libpython3.9.dylib does not exist` you need install python with the enabled framework (you can remove it after the build)
+```console
+wget http://www.python.org/ftp/python/3.10.9/Python-3.10.9.tgz
+tar -xzvf Python-3.10.9.tgz
+./configure --enable-framework=/Library/Frameworks --enable-universalsdk=/ --with-universal-archs=universal2
+make 
+sudo make install
+export PATH="/Library/Frameworks/Python.framework/Versions/3.10/bin:$PATH"
+```
+
 
 ### Installation
 
