@@ -6,15 +6,9 @@ from pathlib import Path
 from urllib.parse import urlparse, parse_qs, urlsplit, urlunsplit
 
 
-def parse_url(url):
-    u = urlparse(url)
-
-    if u.scheme != "ddcode":
-        raise Exception(f"Unsupported schema {u.scheme}")
+def __parse_ddcode_url(u, q):
     if u.hostname != "open-in-console":
         raise Exception(f"Unsupported action {u.hostname}")
-
-    q = parse_qs(u.query)
 
     res = {
         "repo": normalize_url(q["origin"][0]),
@@ -25,6 +19,73 @@ def parse_url(url):
         if f in q:
             res[f] = q[f][0]
     return res
+
+
+def __parse_vscode_url(u, q):
+    if u.hostname != "datadog.datadog-vscode":
+        raise Exception(f"Unsupported url {u.hostname}")
+    if u.path != "/open":
+        raise Exception(f"Unsupported action {u.path}")
+
+    res = {
+        "repo": normalize_url(q["uri"][0]),
+        "path": q["file"][0],
+    }
+
+    if "ref" in q:
+        res["revision"] = q["ref"][0]
+    if "range" in q:
+        r = q["range"][0]
+        p = r.find(":")
+        if p > 0:
+            res["line"] = r[:p]
+            res["column"] = r[p + 1 :]
+        else:
+            res["line"] = r
+
+    return res
+
+
+# "jetbrains://idea/datadog/open-in-ide?origin=https://github.com/user/repo&path=path/in/repo.py:42&revision=123456ABC",
+def __parse_jetbrains_url(u, q):
+    if u.hostname != "idea":
+        raise Exception(f"Unsupported action {u.hostname}")
+    if u.path != "/datadog/open-in-ide":
+        raise Exception(f"Unsupported action {u.path}")
+
+    res = {
+        "repo": normalize_url(q["origin"][0]),
+    }
+
+    path = q["path"][0]
+    p = path.find(":")
+    if p > 0:
+        res["path"] = path[:p]
+        res["line"] = path[p + 1 :]
+    else:
+        res["path"] = path
+
+    if "revision" in q:
+        res["revision"] = q["revision"][0]
+
+    return res
+
+
+SCHEMAS = {
+    "ddcode": __parse_ddcode_url,
+    "vscode": __parse_vscode_url,
+    "jetbrains": __parse_jetbrains_url,
+}
+
+
+def parse_url(url):
+    u = urlparse(url)
+    q = parse_qs(u.query)
+
+    if u.scheme in SCHEMAS:
+        return SCHEMAS[u.scheme](u, q)
+    else:
+        raise Exception(f"Unsupported schema {u.scheme}")
 
 
 SCP_REGEXP = re.compile("^[a-z0-9_]+@([a-z0-9._-]+):(.*)$", re.IGNORECASE)

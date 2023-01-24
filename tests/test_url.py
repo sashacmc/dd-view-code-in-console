@@ -35,6 +35,46 @@ from dd_view_code_in_console.url import parse_url, normalize_url, find_repo_urls
             },
             None,
         ),
+        (
+            "vscode://datadog.datadog-vscode/open?repo=repo&file=path/in/repo.py&uri=https://github.com/user/repo&ref=123456ABC&range=42:24",
+            {
+                "path": "path/in/repo.py",
+                "repo": "https://github.com/user/repo",
+                "revision": "123456ABC",
+                "column": "24",
+                "line": "42",
+            },
+            None,
+        ),
+        (
+            "vscode://datadog.datadog-vscode/open?repo=repo&file=path/in/repo.py&uri=https://github.com/user/repo&ref=123456ABC&range=42",
+            {
+                "path": "path/in/repo.py",
+                "repo": "https://github.com/user/repo",
+                "revision": "123456ABC",
+                "line": "42",
+            },
+            None,
+        ),
+        (
+            "jetbrains://idea/datadog/open-in-ide?origin=https://github.com/user/repo&path=path/in/repo.py:42&revision=123456ABC",
+            {
+                "path": "path/in/repo.py",
+                "repo": "https://github.com/user/repo",
+                "revision": "123456ABC",
+                "line": "42",
+            },
+            None,
+        ),
+        (
+            "jetbrains://idea/datadog/open-in-ide?origin=https://github.com/user/repo&path=path/in/repo.py&revision=123456ABC",
+            {
+                "path": "path/in/repo.py",
+                "repo": "https://github.com/user/repo",
+                "revision": "123456ABC",
+            },
+            None,
+        ),
     ],
 )
 def test_parse_url(repository_url, expected, error):
