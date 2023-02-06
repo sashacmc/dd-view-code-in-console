@@ -46,7 +46,6 @@ def __parse_vscode_url(u, q):
     return res
 
 
-# "jetbrains://idea/datadog/open-in-ide?origin=https://github.com/user/repo&path=path/in/repo.py:42&revision=123456ABC",
 def __parse_jetbrains_url(u, q):
     if u.hostname != "idea":
         raise Exception(f"Unsupported action {u.hostname}")
@@ -127,8 +126,8 @@ def normalize_url(url):
             return ""
 
         if not scheme.startswith("http"):
-            scheme = "https"  # Default to HTTPS.
             port = None
+        scheme = "https"  # Default to HTTPS.
 
     path = __remove_suffix(path, ".git/")
     path = __remove_suffix(path, ".git")

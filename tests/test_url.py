@@ -92,11 +92,11 @@ def test_parse_url(repository_url, expected, error):
         # Supported schemes.
         (
             "http://github.com/user/project/",
-            "http://github.com/user/project",
+            "https://github.com/user/project",
         ),
         (
             "http://github.com/user/project.git",
-            "http://github.com/user/project",
+            "https://github.com/user/project",
         ),
         (
             "https://github.com/user/project.git",
@@ -126,12 +126,12 @@ def test_parse_url(repository_url, expected, error):
         # Subdomain preserved.
         (
             "http://www.github.com/user/project.git",
-            "http://www.github.com/user/project",
+            "https://www.github.com/user/project",
         ),
         # Preserve port for HTTP/HTTPS schemes.
         (
             "http://github.com:8080/user/project.git",
-            "http://github.com:8080/user/project",
+            "https://github.com:8080/user/project",
         ),
         (
             "https://github.com:8080/user/project.git",
